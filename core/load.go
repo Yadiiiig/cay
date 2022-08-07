@@ -20,7 +20,7 @@ func (s *State) LoadLine() {
 	termbox.Flush()
 }
 
-func (s *State) LoadPrevLine(length, index, y int) {
+func (s *State) LoadIndexLine(length, index, y int) {
 	s.Logger.Log(fmt.Sprintf("len %d, index %d, y %d", length, index, y))
 	for i := index; i <= length; i++ {
 		termbox.SetChar(i, y, 0)
