@@ -26,7 +26,14 @@ func (s *State) MoveLeft() {
 func (s *State) MoveRight() {
 	if len(s.Lines[s.CY])-1 != s.CX && len(s.Lines[s.CY])-1 > s.CX {
 		s.CX += 1
+		s.Logger.Log("aaaa")
+	} else if s.CX == 0 && termbox.GetCell(0, s.CY).Ch != 0 {
+		s.CX += 1
+		termbox.SetCursor(s.CX, s.CY)
+		//s.Logger.Log(termbox.GetCell(s.CX, s.CY).Ch)
 	} else {
+		s.Logger.Log("heree")
+
 		if len(s.Lines)-1 != s.CY {
 			s.CY += 1
 			s.CX = 0

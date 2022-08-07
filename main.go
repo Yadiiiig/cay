@@ -39,7 +39,6 @@ func main() {
 	go misc.Blink(&state)
 
 	for {
-		termbox.SetCursor(state.CX, state.CY)
 
 		ev := termbox.PollEvent()
 		if done := state.InputCapture(&ev); done {
@@ -47,6 +46,7 @@ func main() {
 		}
 
 		termbox.Flush()
+		termbox.SetCursor(state.CX, state.CY)
 	}
 
 	termbox.Close()
