@@ -1,6 +1,7 @@
 package core
 
 import (
+
 	"github.com/nsf/termbox-go"
 )
 
@@ -93,4 +94,20 @@ func (s *State) BackSpace() {
 
 func delete_char(s []rune, index int) string {
 	return string(append(s[0:index], s[index+1:]...))
+}
+
+func (s *State) NewLine() {
+	if len(s.Lines[s.CY]) == s.CX { 
+		s.CY += 1
+		s.CX = 0
+	} else {
+		s.Logger.Log(s.Lines[s.CY][s.CX:])
+		s.Lines[s.CY+1] = s.Lines[s.CY][s.CX:]
+		s.Lines[s.CY] = s.Lines[s.CY][:s.CX]
+		s.CX = 0
+		s.CY += 1
+
+		s.LoadPrevLine(len(s.Lines[s.CY]), len(s.Lines[s.CY-1])-1, s.CY-1)
+		s.LoadLine()
+	}
 }

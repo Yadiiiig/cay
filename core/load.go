@@ -1,6 +1,8 @@
 package core
 
 import (
+	"fmt"
+
 	"github.com/nsf/termbox-go"
 )
 
@@ -14,7 +16,15 @@ func (s *State) LoadLine() {
 	for i := 0; i < len(s.Lines[s.CY]); i++ {
 		termbox.SetChar(i, s.CY, rune(s.Lines[s.CY][i]))
 	}
-	s.Logger.Log("debug" + s.Lines[s.CY][:len(s.Lines[s.CY])])
+
+	termbox.Flush()
+}
+
+func (s *State) LoadPrevLine(length, index, y int) {
+	s.Logger.Log(fmt.Sprintf("len %d, index %d, y %d", length, index, y))
+	for i := index; i <= length; i++ {
+		termbox.SetChar(i, y, 0)
+	}
 
 	termbox.Flush()
 }

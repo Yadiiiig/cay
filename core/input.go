@@ -16,6 +16,8 @@ func (s *State) InputCapture(ev *termbox.Event) bool {
 			s.AddSpace()
 		} else if ev.Key == termbox.KeyBackspace || ev.Key == termbox.KeyBackspace2 {
 			s.BackSpace()
+		} else if ev.Key == termbox.KeyEnter {
+			s.NewLine()
 		} else {
 			switch ev.Key {
 			case termbox.KeyArrowLeft:
