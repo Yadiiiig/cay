@@ -8,7 +8,7 @@ import (
 )
 
 func Blink(state *core.State) {
-	d := 500 * time.Millisecond
+	d := 250 * time.Millisecond
 	i := 0
 	for range time.Tick(d) {
 		if i == 1000 {

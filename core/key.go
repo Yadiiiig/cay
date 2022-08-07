@@ -39,26 +39,32 @@ func (s *State) KeyStrokeMap(key rune) {
 		}
 		//fmt.Fprintf(tvw, "%s%s", string(key), value)
 	} else {
-		termbox.SetChar(s.CX, s.CY, key)
-		s.Lines[s.CY] += string(key)
-		s.CX += 1
+		if len(s.Lines[s.CY]) == s.CX || len(s.Lines[s.CY])+1 == s.CX {
+			termbox.SetChar(s.CX, s.CY, key)
+			s.Lines[s.CY] += string(key)
+			s.CX += 1
+
+		} else {
+			termbox.SetChar(s.CX, s.CY, key)
+			s.Lines[s.CY] = s.Lines[s.CY][:s.CX] + string(key) + s.Lines[s.CY][s.CX:]
+			s.CX += 1
+
+			s.LoadLine()
+		}
 	}
 }
 
-// func KeyStroke(tvw *tview.TextView, key rune) {
-// 	switch key {
-// 	case 34:
-// 		fmt.Fprintf(tvw, "%s%s", string(key), `"`)
-// 	case 39:
-// 		fmt.Fprintf(tvw, "%s%s", string(key), "'")
-// 	case 40:
-// 		fmt.Fprintf(tvw, "%s%s", string(key), ")")
-// 		// Set highlight position in the middle of those 2 brackets
-// 	case 91:
-// 		fmt.Fprintf(tvw, "%s%s", string(key), "]")
-// 	case 123:
-// 		fmt.Fprintf(tvw, "%s%s", string(key), "}")
-// 	default:
-// 		fmt.Fprintf(tvw, "%s%d", string(key), key)
-// 	}
-// }
+func (s *State) AddSpace() {
+	if len(s.Lines[s.CY]) == s.CX || len(s.Lines[s.CY])+1 == s.CX {
+		termbox.SetChar(s.CX, s.CY, 32)
+		s.Lines[s.CY] += " "
+		s.CX += 1
+
+	} else {
+		termbox.SetChar(s.CX, s.CY, 32)
+		s.Lines[s.CY] = s.Lines[s.CY][:s.CX] + " " + s.Lines[s.CY][s.CX:]
+		s.CX += 1
+
+		s.LoadLine()
+	}
+}
