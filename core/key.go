@@ -168,3 +168,9 @@ func insert_line(lines *[][]rune, line []rune, i int) {
 	copy((*lines)[i+1:], (*lines)[i:])
 	(*lines)[i] = line
 }
+
+func delete_line(lines *[][]rune, i int) {
+	copy((*lines)[i:], (*lines)[i+1:])
+	(*lines)[len((*lines))-1] = []rune{}
+	*lines = (*lines)[:len(*lines)-1]
+}
