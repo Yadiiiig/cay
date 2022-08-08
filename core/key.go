@@ -27,19 +27,14 @@ func (s *State) KeyStrokeMap(key rune) {
 			termbox.SetChar(s.CX, s.CY, key)
 			s.Logger.Log(string(s.Lines[s.CY]))
 			insert_in_line(&s.Lines[s.CY], key, s.CX)
-			//s.Lines[s.CY] = s.Lines[s.CY][:s.CX] + string(key) + s.Lines[s.CY][s.CX:]
-			//s.Logger.Log(s.Lines[s.CY])
 
 			s.CX += 1
 
 			termbox.SetChar(s.CX, s.CY, value)
 			insert_in_line(&s.Lines[s.CY], value, s.CX)
-			// s.Lines[s.CY] = s.Lines[s.CY][:s.CX] + string(key) + s.Lines[s.CY][s.CX:]
-			// s.Logger.Log(s.Lines[s.CY])
 
 			s.LoadLine()
 		}
-		//fmt.Fprintf(tvw, "%s%s", string(key), value)
 	} else {
 		if len(s.Lines[s.CY]) == s.CX || len(s.Lines[s.CY])+1 == s.CX {
 			termbox.SetChar(s.CX, s.CY, key)
@@ -49,7 +44,7 @@ func (s *State) KeyStrokeMap(key rune) {
 		} else {
 			termbox.SetChar(s.CX, s.CY, key)
 			insert_in_line(&s.Lines[s.CY], key, s.CX)
-			//s.Lines[s.CY] = s.Lines[s.CY][:s.CX] + string(key) + s.Lines[s.CY][s.CX:]
+
 			s.CX += 1
 
 			s.LoadLine()
@@ -66,7 +61,7 @@ func (s *State) AddSpace() {
 	} else {
 		termbox.SetChar(s.CX, s.CY, 32)
 		insert_in_line(&s.Lines[s.CY], 32, s.CX)
-		//s.Lines[s.CY] = s.Lines[s.CY][:s.CX] + " " + s.Lines[s.CY][s.CX:]
+
 		s.CX += 1
 
 		s.LoadLine()
@@ -77,13 +72,13 @@ func (s *State) AddTab() {
 	if len(s.Lines[s.CY]) == s.CX || len(s.Lines[s.CY])+1 == s.CX {
 		termbox.SetChar(s.CX, s.CY, 9)
 		s.Lines[s.CY] = append(s.Lines[s.CY], 9)
-		s.CX += 4
+		s.CX += 1
 
 	} else {
 		termbox.SetChar(s.CX, s.CY, 9)
 		insert_in_line(&s.Lines[s.CY], 9, s.CX)
-		//s.Lines[s.CY] = s.Lines[s.CY][:s.CX] + " " + s.Lines[s.CY][s.CX:]
-		s.CX += 4
+
+		s.CX += 1
 
 		s.LoadLine()
 	}
@@ -102,19 +97,13 @@ func (s *State) BackSpace() {
 	}
 
 	if len(s.Lines[s.CY]) == s.CX || len(s.Lines[s.CY])+1 == s.CX {
-		// s.Logger.Log(s.Lines[s.CY])
 		s.Lines[s.CY] = s.Lines[s.CY][:len(s.Lines[s.CY])-1]
 		s.CX -= 1
 		termbox.SetChar(s.CX, s.CY, 0)
-		// s.Logger.Log(s.Lines[s.CY])
 	} else {
-		// s.Logger.Log(s.Lines[s.CY])
 		delete_in_line(&s.Lines[s.CY], s.CX-1)
-		//s.Lines[s.CY] = delete_char([]rune(s.Lines[s.CY]), s.CX-1)
-		//termbox.SetChar(s.CX, s.CY, 0)
 		s.CX -= 1
 		s.LoadLine()
-		//s.Logger.Log(s.Lines[s.CY])
 	}
 
 }
@@ -123,11 +112,8 @@ func (s *State) Delete() {
 	if len(s.Lines[s.CY]) == s.CX || len(s.Lines[s.CY])+1 == s.CX {
 		return
 	} else {
-		//s.Logger.Log(s.Lines[s.CY])
 		delete_in_line(&s.Lines[s.CY], s.CX)
-		//termbox.SetChar(s.CX, s.CY, 0)
 		s.LoadLine()
-		//s.Logger.Log(s.Lines[s.CY])
 	}
 }
 

@@ -15,9 +15,10 @@ func (s *State) InputCapture(ev *termbox.Event) bool {
 		} else if ev.Key == termbox.KeySpace {
 			s.AddSpace()
 		} else if ev.Key == termbox.KeyTab {
-			for i := 0; i < 4; i++ { 
-				s.AddSpace()
-			}
+			// for i := 0; i < 4; i++ {
+			// 	s.AddSpace()
+			// }
+			s.AddTab()
 		} else if ev.Key == termbox.KeyBackspace || ev.Key == termbox.KeyBackspace2 {
 			s.BackSpace()
 		} else if ev.Key == termbox.KeyDelete {
@@ -39,19 +40,4 @@ func (s *State) InputCapture(ev *termbox.Event) bool {
 	}
 
 	return false
-
-	// tvw.Box.SetInputCapture(func(e *tcell.EventKey) *tcell.EventKey {
-
-	// 	// This checks if it's a 'typeable key' is
-	// 	if e.Rune() != 0 {
-	// 		KeyStroke(tvw, e.Rune())
-	// 		return nil
-	// 	}
-
-	// 	return nil
-	// })
-}
-
-func foo(s string) {
-
 }

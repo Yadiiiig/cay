@@ -7,7 +7,6 @@ import (
 	"github.com/yadiiiig/cay/core"
 	"github.com/yadiiiig/cay/file"
 	"github.com/yadiiiig/cay/logger"
-	"github.com/yadiiiig/cay/misc"
 )
 
 func init() {
@@ -36,17 +35,16 @@ func main() {
 		return
 	}
 
-	go misc.Blink(&state)
+	//go misc.Blink(&state)
 
 	for {
-
 		ev := termbox.PollEvent()
 		if done := state.InputCapture(&ev); done {
 			break
 		}
 
-		termbox.Flush()
 		termbox.SetCursor(state.CX, state.CY)
+		termbox.Flush()
 	}
 
 	termbox.Close()

@@ -19,8 +19,7 @@ func (s *State) MoveLeft() {
 	}
 
 	termbox.SetCursor(s.CX, s.CY)
-	termbox.Flush()
-	// s.Logger.Log(fmt.Sprintf("x: %d, y: %d | length line: %d | current char: %s rune: %d", s.CX, s.CY, len(s.Lines[s.CY]), string(termbox.GetCell(s.CX, s.CY).Ch), termbox.GetCell(s.CX, s.CY).Ch))
+	s.Logger.Log(fmt.Sprintf("x: %d, y: %d | length line: %d | current char: %s rune: %d", s.CX, s.CY, len(s.Lines[s.CY]), string(termbox.GetCell(s.CX, s.CY).Ch), termbox.GetCell(s.CX, s.CY).Ch))
 }
 
 func (s *State) MoveRight() {
@@ -37,7 +36,6 @@ func (s *State) MoveRight() {
 		}
 	}
 	termbox.SetCursor(s.CX, s.CY)
-	termbox.Flush()
 	s.Logger.Log(fmt.Sprintf("x: %d, y: %d | length line: %d | current char: %s rune: %d", s.CX, s.CY, len(s.Lines[s.CY]), string(termbox.GetCell(s.CX, s.CY).Ch), termbox.GetCell(s.CX, s.CY).Ch))
 }
 
@@ -61,7 +59,6 @@ func (s *State) MoveUp() {
 	}
 
 	termbox.SetCursor(s.CX, s.CY)
-	termbox.Flush()
 	s.Logger.Log(fmt.Sprintf("x: %d, y: %d | length line: %d | current char: %s rune: %d", s.CX, s.CY, len(s.Lines[s.CY]), string(termbox.GetCell(s.CX, s.CY).Ch), termbox.GetCell(s.CX, s.CY).Ch))
 }
 
@@ -76,6 +73,5 @@ func (s *State) MoveDown() {
 	}
 
 	termbox.SetCursor(s.CX, s.CY)
-	termbox.Flush()
 	s.Logger.Log(fmt.Sprintf("x: %d, y: %d | length line: %d | current char: %s rune: %d", s.CX, s.CY, len(s.Lines[s.CY]), string(termbox.GetCell(s.CX, s.CY).Ch), termbox.GetCell(s.CX, s.CY).Ch))
 }

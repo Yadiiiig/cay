@@ -16,10 +16,8 @@ func Blink(state *core.State) {
 		}
 		if i%2 == 0 {
 			termbox.HideCursor()
-			termbox.Flush()
 		} else {
 			termbox.SetCursor(state.CX, state.CY)
-			termbox.Flush()
 		}
 
 		i++
