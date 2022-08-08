@@ -99,10 +99,7 @@ func (s *State) BackSpace() {
 
 func (s *State) Delete() {
 	if len(s.Lines[s.CY]) == s.CX || len(s.Lines[s.CY])+1 == s.CX {
-		s.Logger.Log(s.Lines[s.CY])
-		s.Lines[s.CY] = s.Lines[s.CY][:len(s.Lines[s.CY])]
-		termbox.SetChar(s.CX, s.CY, 0)
-		s.Logger.Log(s.Lines[s.CY])
+		return
 	} else {
 		s.Logger.Log(s.Lines[s.CY])
 		s.Lines[s.CY] = delete_char([]rune(s.Lines[s.CY]), s.CX)
