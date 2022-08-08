@@ -4,7 +4,6 @@ import (
 	"github.com/nsf/termbox-go"
 )
 
-// Should be changed to runes instead of string
 var SymbolKeys = map[rune]rune{
 	34:  34,
 	39:  39,
