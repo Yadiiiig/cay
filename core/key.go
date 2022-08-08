@@ -71,7 +71,13 @@ func (s *State) AddSpace() {
 
 func (s *State) BackSpace() {
 	if s.CX == 0 {
-		return
+		switch s.CY {
+			case 0: return
+			default: 
+				s.CY -= 1
+				s.CX = len(s.Lines[s.CY])
+				return
+		}
 	}
 
 	if len(s.Lines[s.CY]) == s.CX || len(s.Lines[s.CY])+1 == s.CX {
@@ -90,6 +96,22 @@ func (s *State) BackSpace() {
 	}
 
 }
+
+func (s *State) Delete() {
+	if len(s.Lines[s.CY]) == s.CX || len(s.Lines[s.CY])+1 == s.CX {
+		s.Logger.Log(s.Lines[s.CY])
+		s.Lines[s.CY] = s.Lines[s.CY][:len(s.Lines[s.CY])]
+		termbox.SetChar(s.CX, s.CY, 0)
+		s.Logger.Log(s.Lines[s.CY])
+	} else {
+		s.Logger.Log(s.Lines[s.CY])
+		s.Lines[s.CY] = delete_char([]rune(s.Lines[s.CY]), s.CX)
+		//termbox.SetChar(s.CX, s.CY, 0)
+		s.LoadLine()
+		s.Logger.Log(s.Lines[s.CY])
+	}
+}
+
 
 func (s *State) NewLine() {
 	if len(s.Lines[s.CY]) == s.CX {
