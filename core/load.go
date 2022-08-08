@@ -28,3 +28,24 @@ func (s *State) LoadIndexLine(length, index, y int) {
 
 	termbox.Flush()
 }
+
+func (s *State) LoadIndexRestLine(length, index, y int) {
+	w, _ := termbox.Size()
+	for i := index; i <= length; i++ {
+		termbox.SetChar(i, y-1, 0)
+	}
+
+	for i := y; i < len(s.Lines); i++ {
+		for j := 0; j < w; j++ {
+			termbox.SetChar(j, i, 0)
+		}
+	}
+
+	for i := y; i < len(s.Lines); i++ {
+		for j := 0; j < len(s.Lines[i]); j++ {
+			termbox.SetChar(j, i, s.Lines[i][j])
+		}
+	}
+
+	termbox.Flush()
+}

@@ -22,18 +22,22 @@ func Read(file string, s *core.State) error {
 	snr.Split(bufio.ScanLines)
 
 	y := 0
-	lines := make(map[int]string)
+	lines := [][]rune{}
 
 	for snr.Scan() {
 		txt := snr.Text()
 
-		lines[y] = txt
+		lines[y] = []rune(txt)
 
-		for i := 0; i < len(txt); i++ {
-			termbox.SetChar(i, y, rune(txt[i]))
+		for i := 0; i < len(lines[y]); i++ {
+			termbox.SetChar(i, y, lines[y][i])
 		}
 
 		y++
+	}
+
+	if len(lines) == 0 {
+		lines = append(lines, []rune{})
 	}
 
 	stat, err := tmp.Stat()
@@ -49,12 +53,6 @@ func Read(file string, s *core.State) error {
 	s.CY = 0
 
 	s.Lines = lines
-
-	// if len(lines) != 0 {
-	// 	state.LL = len(lines[0])
-	// } else {
-	// 	state.LL = 0
-	// }
 
 	termbox.SetCursor(s.CX, s.CY)
 	termbox.Flush()

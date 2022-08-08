@@ -11,7 +11,7 @@ type State struct {
 	// Cursor position
 	CX, CY int
 
-	Lines map[int]string
+	Lines [][]rune
 
 	Logger logger.Logger
 }
