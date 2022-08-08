@@ -7,6 +7,7 @@ import (
 // InputCapture captures all the input from mouse/keyboard
 // It will only ever return true if the application should exit
 func (s *State) InputCapture(ev *termbox.Event) bool {
+	// s.Logger.Log(string(ev.Key))
 	if ev.Type == termbox.EventKey {
 		if ev.Ch != 0 {
 			s.KeyStrokeMap(ev.Ch)
@@ -50,8 +51,4 @@ func (s *State) InputCapture(ev *termbox.Event) bool {
 
 	// 	return nil
 	// })
-}
-
-func foo(s string) {
-
 }

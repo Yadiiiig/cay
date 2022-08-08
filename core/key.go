@@ -97,6 +97,19 @@ func (s *State) BackSpace() {
 
 }
 
+func (s *State) ShiftBackSpace() {
+	s.Logger.Log("ShiftBackSpace")
+	if s.CX == 0 {
+		switch s.CY {
+			case 0: return
+			default: 
+				s.CY -= 1
+				s.CX = len(s.Lines[s.CY])
+				return
+		}
+	}
+}
+
 func (s *State) Delete() {
 	if len(s.Lines[s.CY]) == s.CX || len(s.Lines[s.CY])+1 == s.CX {
 		return
@@ -108,7 +121,6 @@ func (s *State) Delete() {
 		s.Logger.Log(s.Lines[s.CY])
 	}
 }
-
 
 func (s *State) NewLine() {
 	if len(s.Lines[s.CY]) == s.CX {
