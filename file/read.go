@@ -22,7 +22,7 @@ func Read(file string, s *core.State) error {
 	snr.Split(bufio.ScanLines)
 
 	y := 0
-	lines := [][]rune{}
+	lines := [][]rune{{}}
 
 	for snr.Scan() {
 		txt := snr.Text()
