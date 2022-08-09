@@ -21,11 +21,11 @@ func (s *State) LoadBar() {
 	}
 
 	text := "[" + strconv.Itoa(s.CY) + ":" + strconv.Itoa(s.CX) + "]"
-	lenght := width - len(text)
-	for i := width - 1; i > lenght-1; i-- {
-		termbox.SetChar(i, height-1, rune(text[i-lenght]))
+	length := width - len(text)
+	for i := width - 1; i > length-1; i-- {
+		termbox.SetChar(i, height-1, rune(text[i-length]))
     }
-    prevWidth.cursorIndicator = lenght
+    prevWidth.cursorIndicator = length
 }
 
 // Updates the data on the bar
@@ -39,14 +39,14 @@ func (s *State) UpdateBar() {
 	}
 
 	text := "[" + strconv.Itoa(s.CY) + ":" + strconv.Itoa(s.CX) + "]"
-	lenght := width - len(text)
-    if lenght > prevWidth.cursorIndicator {
+	length := width - len(text)
+    if length > prevWidth.cursorIndicator {
         for i := width-1; i > prevWidth.cursorIndicator-1; i-- {
             termbox.SetChar(i, height-1, rune(0))
         }
     }
-	for i := width - 1; i > lenght-1; i-- {
-		termbox.SetChar(i, height-1, rune(text[i-lenght]))
+	for i := width - 1; i > length-1; i-- {
+		termbox.SetChar(i, height-1, rune(text[i-length]))
     }
-    prevWidth.cursorIndicator = lenght
+    prevWidth.cursorIndicator = length
 }
