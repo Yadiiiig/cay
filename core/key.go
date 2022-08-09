@@ -118,11 +118,14 @@ func (s *State) Delete() {
 
 func (s *State) NewLine() {
 	if len(s.Lines)-1 == s.CY {
-		if len(s.Lines[s.CY]) == s.CX {
+		if len(s.Lines[s.CY]) == s.CX && s.BY != s.CY {
 			s.Lines = append(s.Lines, []rune{})
 			s.CY += 1
 			s.CX = 0
 		} else {
+			if s.CY == s.BY {
+				return
+			}
 			prev := len(s.Lines[s.CY])
 
 			s.Lines = append(s.Lines, s.Lines[s.CY][s.CX:])
@@ -135,6 +138,9 @@ func (s *State) NewLine() {
 			s.LoadLine()
 		}
 	} else {
+		if s.CY == s.BY {
+			return
+		}
 		prev := len(s.Lines[s.CY])
 
 		insert_line(&s.Lines, s.Lines[s.CY][s.CX:], s.CY+1)

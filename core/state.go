@@ -11,6 +11,9 @@ type State struct {
 	// Cursor position
 	CX, CY int
 
+	// Bar position
+	BY int
+
 	Lines [][]rune
 
 	Logger logger.Logger

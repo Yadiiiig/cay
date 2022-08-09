@@ -28,7 +28,7 @@ func (s *State) MoveRight() {
 	} else if s.CX == 0 && len(s.Lines[s.CY]) == 1 || s.CX == len(s.Lines[s.CY])-1 {
 		s.CX += 1
 	} else {
-		if len(s.Lines)-1 != s.CY {
+		if len(s.Lines)-1 != s.CY && s.BY != s.CY {
 			s.CY += 1
 			s.CX = 0
 		} else {
@@ -63,7 +63,7 @@ func (s *State) MoveUp() {
 }
 
 func (s *State) MoveDown() {
-	if len(s.Lines)-1 != s.CY {
+	if len(s.Lines)-1 != s.CY && s.BY != s.CY {
 		s.CY += 1
 		if s.CX > len(s.Lines[s.CY])-1 {
 			s.CX = 0
