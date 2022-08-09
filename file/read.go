@@ -57,6 +57,8 @@ func Read(file string, s *core.State) error {
 	_, height := termbox.Size()
 	s.BY = height - 2
 
+	s.LoadBar()
+
 	termbox.SetCursor(s.CX, s.CY)
 	termbox.Flush()
 
