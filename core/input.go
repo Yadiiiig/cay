@@ -38,6 +38,7 @@ func (s *State) InputCapture(ev *termbox.Event) bool {
 			}
 		}
 	}
+	s.UpdateBar()
 
 	return false
 }

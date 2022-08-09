@@ -38,6 +38,10 @@ func (s *State) LoadIndexRestLine(length, index, y int) {
 	}
 
 	for i := y; i < len(s.Lines); i++ {
+		if i >= s.BY+1 {
+			s.UpdateBar()
+			continue
+		}
 		for j := 0; j < len(s.Lines[i]); j++ {
 			termbox.SetChar(j, i, s.Lines[i][j])
 		}
