@@ -1,6 +1,8 @@
 package core
 
 import (
+	"fmt"
+
 	"github.com/nsf/termbox-go"
 )
 
@@ -84,39 +86,40 @@ func (s *State) AddTab() {
 }
 
 func (s *State) BackSpace() {
-	if s.CX == 0 {
-		switch s.CY {
-		case 0:
-			return
-		default:
-			s.CY -= 1
-			s.CX = len(s.Lines[s.CY])
-			return
-		}
-	}
+	// cant backspace on index 0
+	// bring next lines up
+	if s.CY == 0 && s.CX == 0 {
+		return
+	} else if s.CX == 0 {
+		s.CY -= 1
+		s.Logger.Log(string(s.Lines[s.CY]))
+		s.Lines[s.CY] = append(s.Lines[s.CY], s.Lines[s.CY+1]...)
+		s.LoadLine()
+		s.RemoveLines(len(s.Lines), s.CY)
+		s.Logger.Log(string(s.Lines[s.CY]))
 
-	if len(s.Lines[s.CY]) == s.CX || len(s.Lines[s.CY])+1 == s.CX {
-		s.Lines[s.CY] = s.Lines[s.CY][:len(s.Lines[s.CY])-1]
-		s.CX -= 1
-		termbox.SetChar(s.CX, s.CY, 0)
 	} else {
-		delete_in_line(&s.Lines[s.CY], s.CX-1)
 		s.CX -= 1
+		delete_in_line(&s.Lines[s.CY], s.CX)
 		s.LoadLine()
 	}
-
 }
 
 func (s *State) Delete() {
-	if len(s.Lines[s.CY]) == s.CX || len(s.Lines[s.CY])+1 == s.CX {
-		// s.Logger.Log(string(s.Lines[s.CY]))
+	s.Logger.Log(fmt.Sprintf("Length lines: %d, current index: %d", len(s.Lines), s.CY))
+	// if Y is on last line   && if X is on the last char	  || if X is 'outside' the last char
+	if len(s.Lines)-1 == s.CY && len(s.Lines[s.CY])-1 == s.CX || len(s.Lines[s.CY]) == s.CX {
+		return
+	} else if (len(s.Lines[s.CY]) == s.CX || len(s.Lines[s.CY])+1 == s.CX) {
+		prev_current := len(s.Lines[s.CY])
+		// prev_next := len(s.Lines[s.CY+1])
+		s.RemoveLines(len(s.Lines), s.CY)
 		s.Lines[s.CY] = append(s.Lines[s.CY], s.Lines[s.CY+1]...)
 		delete_line(&s.Lines, s.CY+1)
-		termbox.SetChar(s.CX, s.CY+1, 0)
-		// s.LoadLine()
-		s.LoadIndexLine(len(s.Lines[s.CY+1]), s.CX, s.CY+1)
-		s.LoadIndexRestLine(len(s.Lines[s.CY]), len(s.Lines[s.CY]), s.CY)
-		return
+		
+		s.WriteIndexLine(len(s.Lines[s.CY]), prev_current, s.CY)
+		s.LoadIndexRestLine(len(s.Lines), s.CY+1)
+
 	} else {
 		delete_in_line(&s.Lines[s.CY], s.CX+1)
 		s.LoadLine()
@@ -156,7 +159,7 @@ func (s *State) NewLine() {
 		s.CX = 0
 		s.CY += 1
 
-		s.LoadIndexRestLine(prev, len(s.Lines[s.CY-1]), s.CY)
+		s.LoadIndexRestNewLine(prev, len(s.Lines[s.CY-1]), s.CY)
 	}
 }
 
