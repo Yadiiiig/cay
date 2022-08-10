@@ -109,9 +109,16 @@ func (s *State) BackSpace() {
 
 func (s *State) Delete() {
 	if len(s.Lines[s.CY]) == s.CX || len(s.Lines[s.CY])+1 == s.CX {
+		// s.Logger.Log(string(s.Lines[s.CY]))
+		s.Lines[s.CY] = append(s.Lines[s.CY], s.Lines[s.CY+1]...)
+		delete_line(&s.Lines, s.CY+1)
+		termbox.SetChar(s.CX, s.CY+1, 0)
+		// s.LoadLine()
+		s.LoadIndexLine(len(s.Lines[s.CY+1]), s.CX, s.CY+1)
+		s.LoadIndexRestLine(len(s.Lines[s.CY]), len(s.Lines[s.CY]), s.CY)
 		return
 	} else {
-		delete_in_line(&s.Lines[s.CY], s.CX)
+		delete_in_line(&s.Lines[s.CY], s.CX+1)
 		s.LoadLine()
 	}
 }
