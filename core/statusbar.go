@@ -16,14 +16,7 @@ type cell struct {
 // a, b, c, x, y and z are indictor cells
 // idea is that they are named the same in config
 // a, b and c are left of screen. x, y and z are right
-var bar struct {
-    aIndicator cell
-    bIndicator cell
-    cIndicator cell
-    xIndicator cell
-    yIndicator cell
-    zIndicator cell
-}
+var cells []cell
 
 // Initializes the status bar and draws the info for the first time
 func (s *State) LoadBar() {
@@ -35,11 +28,14 @@ func (s *State) LoadBar() {
 //		termbox.SetChar(i, height-1, rune(status[i]))
 //	}
 
-    bar.xIndicator = cell{
-        value: "[%CY%:%CX%]",
-        width: 0,
+    cells = []cell{
+        {},{},{},{},{},
+        {
+            value: "[%CY%:%CX%]",
+            width: 0,
+        },
     }
-    s.drawCell(width, height, &bar.xIndicator)
+    s.drawCell(width, height, &cells)
 
 // 	text := "[" + strconv.Itoa(s.CY) + ":" + strconv.Itoa(s.CX) + "]"
 // 	length := width - len(text)
@@ -70,26 +66,28 @@ func (s *State) UpdateBar() {
 // 		termbox.SetChar(i, height-1, rune(text[i-length]))
 //     }
 //     bar.xIndicator.width = length
-     s.drawCell(width, height, &bar.xIndicator)
+     s.drawCell(width, height, &cells)
 }
 
-func (s *State) drawCell(width int, height int, cell *cell) {
-    regex := regexp.MustCompile("%[A-z]{2}%")
-    text := cell.value
-    for _, v := range regex.FindAllString(cell.value, -1) {
-        value := s.calcItem(v)
-        text = strings.Replace(text, v, value, 1)
-    }
-	length := width - len(text)
-    if length > cell.width {
-        for i := width-1; i > cell.width-1; i-- {
-            termbox.SetChar(i, height-1, rune(0))
+func (s *State) drawCell(width int, height int, cells *[]cell) {
+    for _, cell := range *cells {
+        regex := regexp.MustCompile("%[A-z]{2}%")
+        text := cell.value
+        for _, v := range regex.FindAllString(cell.value, -1) {
+            value := s.calcItem(v)
+            text = strings.Replace(text, v, value, 1)
         }
+        length := width - len(text)
+        if length > cell.width {
+            for i := width-1; i > cell.width-1; i-- {
+                termbox.SetChar(i, height-1, rune(0))
+            }
+        }
+        for i := width - 1; i > length-1; i-- {
+            termbox.SetChar(i, height-1, rune(text[i-length]))
+        }
+        cell.width = length
     }
-	for i := width - 1; i > length-1; i-- {
-		termbox.SetChar(i, height-1, rune(text[i-length]))
-    }
-    cell.width = length
 }
 
 func (s *State) calcItem(item string) string {
