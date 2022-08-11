@@ -2,6 +2,7 @@ package core
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/nsf/termbox-go"
 )
@@ -105,7 +106,7 @@ func (s *State) BackSpace() {
 
 func (s *State) Delete() {
 	s.Logger.Log(fmt.Sprintf("Length lines: %d, current index: %d", len(s.Lines), s.CY))
-	// if Y is on last line   && if X is on the last char	  
+	// if Y is on last line   && if X is on the last char
 	if len(s.Lines)-1 == s.CY && len(s.Lines[s.CY])-1 == s.CX {
 		return
 	} else if len(s.Lines[s.CY]) > s.CX {
@@ -115,7 +116,7 @@ func (s *State) Delete() {
 		prev_current := len(s.Lines[s.CY])
 		s.RemoveLines(len(s.Lines), s.CY)
 		s.Lines[s.CY] = append(s.Lines[s.CY], s.Lines[s.CY+1]...)
-		
+
 		delete_line(&s.Lines, s.CY+1)
 		s.WriteIndexLine(len(s.Lines[s.CY]), prev_current, s.CY)
 		s.LoadIndexRestLine(len(s.Lines), s.CY+1)
@@ -152,11 +153,38 @@ func (s *State) NewLine() {
 		insert_line(&s.Lines, s.Lines[s.CY][s.CX:], s.CY+1)
 		s.Lines[s.CY] = s.Lines[s.CY][:s.CX]
 
-		s.CX = 0
 		s.CY += 1
+		s.CX = 0
 
 		s.LoadIndexRestNewLine(prev, len(s.Lines[s.CY-1]), s.CY)
 	}
+}
+
+func (s *State) CtrlW() {
+	if (string(s.Lines[s.CY])) == "" || (string(s.Lines[s.CY])) == " " {
+
+	}
+
+	// s.Logger.Log(string(s.Lines[s.CY][s.CX+1:]))
+	space := strings.Index(string(s.Lines[s.CY][s.CX+1:]), " ")
+
+	// s.Logger.Log(fmt.Sprintf("Next space should be at index %d", space))
+
+	if space == -1 {
+		s.Lines = append(s.Lines, []rune{})
+		s.CX = 0
+		s.CY += 1
+		return
+	}
+	s.CX += space+1
+
+	// for i := 0; i < len(s.Lines[s.CY]); i++ {
+
+	// }
+}
+
+func (s *State) CtrlS() {
+
 }
 
 // specific line operations

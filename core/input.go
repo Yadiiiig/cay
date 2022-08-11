@@ -25,6 +25,10 @@ func (s *State) InputCapture(ev *termbox.Event) bool {
 			s.Delete()
 		} else if ev.Key == termbox.KeyEnter {
 			s.NewLine()
+		} else if ev.Key == termbox.KeyCtrlW {
+			s.CtrlW()
+		} else if ev.Key == termbox.KeyCtrlS {
+			s.CtrlS()
 		} else {
 			switch ev.Key {
 			case termbox.KeyArrowLeft:
