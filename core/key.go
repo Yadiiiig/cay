@@ -102,14 +102,13 @@ func (s *State) BackSpace() {
 }
 
 func (s *State) Delete() {
-	if len(s.Lines[s.CY]) == 0 && s.CX == 0 && len(s.Lines) == 1 {
+	if len(s.Lines)-1 == s.CY && len(s.Lines[s.CY]) == 0 {
+		return
+	} else if len(s.Lines)-1 == s.CY && len(s.Lines[s.CY]) == s.CX {
 		return
 	} else if len(s.Lines[s.CY]) == 1 && s.CX == 0 {
 		delete_in_line(&s.Lines[s.CY], s.CX)
 		s.LoadLine()
-		// if Y is on last line   && if X is on the last char
-	} else if len(s.Lines)-1 == s.CY && len(s.Lines[s.CY])-1 == s.CX {
-		return
 	} else if len(s.Lines[s.CY]) > s.CX {
 		delete_in_line(&s.Lines[s.CY], s.CX)
 		s.LoadLine()
