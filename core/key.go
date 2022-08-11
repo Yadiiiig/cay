@@ -102,7 +102,7 @@ func (s *State) BackSpace() {
 }
 
 func (s *State) Delete() {
-	if len(s.Lines[s.CY]) == 0 && s.CX == 0 {
+	if len(s.Lines[s.CY]) == 0 && s.CX == 0 && len(s.Lines) == 1 {
 		return
 	} else if len(s.Lines[s.CY]) == 1 && s.CX == 0 {
 		delete_in_line(&s.Lines[s.CY], s.CX)
