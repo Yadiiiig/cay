@@ -1,8 +1,6 @@
 package core
 
 import (
-	"fmt"
-
 	"github.com/nsf/termbox-go"
 )
 
@@ -104,18 +102,22 @@ func (s *State) BackSpace() {
 }
 
 func (s *State) Delete() {
-	s.Logger.Log(fmt.Sprintf("Length lines: %d, current index: %d", len(s.Lines), s.CY))
-	// if Y is on last line   && if X is on the last char	  
-	if len(s.Lines)-1 == s.CY && len(s.Lines[s.CY])-1 == s.CX {
+	if len(s.Lines[s.CY]) == 0 && s.CX == 0 {
+		return
+	} else if len(s.Lines[s.CY]) == 1 && s.CX == 0 {
+		delete_in_line(&s.Lines[s.CY], s.CX)
+		s.LoadLine()
+		// if Y is on last line   && if X is on the last char
+	} else if len(s.Lines)-1 == s.CY && len(s.Lines[s.CY])-1 == s.CX {
 		return
 	} else if len(s.Lines[s.CY]) > s.CX {
-		delete_in_line(&s.Lines[s.CY], s.CX+1)
+		delete_in_line(&s.Lines[s.CY], s.CX)
 		s.LoadLine()
 	} else {
 		prev_current := len(s.Lines[s.CY])
 		s.RemoveLines(len(s.Lines), s.CY)
 		s.Lines[s.CY] = append(s.Lines[s.CY], s.Lines[s.CY+1]...)
-		
+
 		delete_line(&s.Lines, s.CY+1)
 		s.WriteIndexLine(len(s.Lines[s.CY]), prev_current, s.CY)
 		s.LoadIndexRestLine(len(s.Lines), s.CY+1)
