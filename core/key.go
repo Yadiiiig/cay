@@ -86,22 +86,20 @@ func (s *State) AddTab() {
 }
 
 func (s *State) BackSpace() {
-	// cant backspace on index 0
-	// bring next lines up
 	if s.CY == 0 && s.CX == 0 {
 		return
-	} else if s.CX == 0 {
-		s.CY -= 1
-		s.Logger.Log(string(s.Lines[s.CY]))
-		s.Lines[s.CY] = append(s.Lines[s.CY], s.Lines[s.CY+1]...)
-		s.LoadLine()
-		s.RemoveLines(len(s.Lines), s.CY)
-		s.Logger.Log(string(s.Lines[s.CY]))
-
-	} else {
+	} else if s.CX != 0 {
 		s.CX -= 1
 		delete_in_line(&s.Lines[s.CY], s.CX)
 		s.LoadLine()
+	} else {
+		s.CY -= 1
+		s.CX = len(s.Lines[s.CY])
+		s.Lines[s.CY] = append(s.Lines[s.CY], s.Lines[s.CY+1]...)
+
+		s.LoadLine()
+		s.RemoveLines(len(s.Lines), s.CY)
+		delete_line(&s.Lines, s.CY+1)
 	}
 }
 
