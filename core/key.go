@@ -84,35 +84,42 @@ func (s *State) AddTab() {
 }
 
 func (s *State) BackSpace() {
-	if s.CX == 0 {
-		switch s.CY {
-		case 0:
-			return
-		default:
-			s.CY -= 1
-			s.CX = len(s.Lines[s.CY])
-			return
-		}
-	}
-
-	if len(s.Lines[s.CY]) == s.CX || len(s.Lines[s.CY])+1 == s.CX {
-		s.Lines[s.CY] = s.Lines[s.CY][:len(s.Lines[s.CY])-1]
+	if s.CY == 0 && s.CX == 0 {
+		return
+	} else if s.CX != 0 {
 		s.CX -= 1
-		termbox.SetChar(s.CX, s.CY, 0)
-	} else {
-		delete_in_line(&s.Lines[s.CY], s.CX-1)
-		s.CX -= 1
+		delete_in_line(&s.Lines[s.CY], s.CX)
 		s.LoadLine()
-	}
+	} else {
+		s.CY -= 1
+		s.CX = len(s.Lines[s.CY])
+		s.Lines[s.CY] = append(s.Lines[s.CY], s.Lines[s.CY+1]...)
 
+		s.LoadLine()
+		s.RemoveLines(len(s.Lines), s.CY)
+		delete_line(&s.Lines, s.CY+1)
+	}
 }
 
 func (s *State) Delete() {
-	if len(s.Lines[s.CY]) == s.CX || len(s.Lines[s.CY])+1 == s.CX {
+	if len(s.Lines)-1 == s.CY && len(s.Lines[s.CY]) == 0 {
 		return
-	} else {
+	} else if len(s.Lines)-1 == s.CY && len(s.Lines[s.CY]) == s.CX {
+		return
+	} else if len(s.Lines[s.CY]) == 1 && s.CX == 0 {
 		delete_in_line(&s.Lines[s.CY], s.CX)
 		s.LoadLine()
+	} else if len(s.Lines[s.CY]) > s.CX {
+		delete_in_line(&s.Lines[s.CY], s.CX)
+		s.LoadLine()
+	} else {
+		prev_current := len(s.Lines[s.CY])
+		s.RemoveLines(len(s.Lines), s.CY)
+		s.Lines[s.CY] = append(s.Lines[s.CY], s.Lines[s.CY+1]...)
+
+		delete_line(&s.Lines, s.CY+1)
+		s.WriteIndexLine(len(s.Lines[s.CY]), prev_current, s.CY)
+		s.LoadIndexRestLine(len(s.Lines), s.CY+1)
 	}
 }
 
@@ -149,7 +156,7 @@ func (s *State) NewLine() {
 		s.CX = 0
 		s.CY += 1
 
-		s.LoadIndexRestLine(prev, len(s.Lines[s.CY-1]), s.CY)
+		s.LoadIndexRestNewLine(prev, len(s.Lines[s.CY-1]), s.CY)
 	}
 }
 
