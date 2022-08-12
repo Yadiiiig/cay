@@ -160,27 +160,28 @@ func (s *State) NewLine() {
 	}
 }
 
-func (s *State) CtrlW() {
-	if (string(s.Lines[s.CY])) == "" || (string(s.Lines[s.CY])) == " " {
-
-	}
-
-	// s.Logger.Log(string(s.Lines[s.CY][s.CX+1:]))
-	space := strings.Index(string(s.Lines[s.CY][s.CX+1:]), " ")
-
-	// s.Logger.Log(fmt.Sprintf("Next space should be at index %d", space))
-
-	if space == -1 {
-		s.Lines = append(s.Lines, []rune{})
-		s.CX = 0
-		s.CY += 1
+func (s *State) CtrlW() {	
+	// if only 1 line	 && Y cursor is out of bounds
+	if len(s.Lines) == 0 && s.CY > len(s.Lines) {
 		return
 	}
-	s.CX += space+1
 
-	// for i := 0; i < len(s.Lines[s.CY]); i++ {
+	// if X cursor is out of bounds
+	if s.CX > len(s.Lines[s.CY]) {
+		return
+	}
 
-	// }
+	// looks for next index of a space from X cursor
+	space := strings.Index(string(s.Lines[s.CY][s.CX+1:]), " ")
+
+	// if there is no space following the X cursor
+	// move X cursor to end of line
+	if space == -1 {
+		s.CX = len(s.Lines[s.CY])-1	
+		return
+	}
+	// cursor is moved to the index after the space
+	s.CX += space+2
 }
 
 func (s *State) CtrlS() {
