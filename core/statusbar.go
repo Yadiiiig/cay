@@ -1,7 +1,6 @@
 package core
 
 import (
-	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
@@ -42,12 +41,12 @@ func (s *State) LoadBar() {
 			value:     "B",
 			width:     0,
 		},
-		{cell_type: 'c', value: "C", width: 0}, {cell_type: 'y', value: "", width: 0}, {cell_type: 'z', value: "", width: 0},
+		{cell_type: 'c', value: "C", width: 0}, 
 		{
 			cell_type: 'x',
 			value:     "[%CY%:%CX%]",
 			width:     0,
-		},
+		}, {cell_type: 'y', value: "", width: 0}, {cell_type: 'z', value: "", width: 0},
 	}
 	s.drawCell(width, height, &cells)
 
@@ -108,10 +107,10 @@ func (s *State) drawCell(width int, height int, cells *[]cell) {
 		} else {
 			// right side of bar
 			length := width - len(text)
-			offset := s.calc_offset((*cells)[i:])
+			offset := s.calc_offset((*cells)[i+1:])
 			if len(text) < cell.width {
-				for i := width - 1 - offset; i > width-cell.width-1-offset; i-- {
-					termbox.SetChar(i, height-1, rune(0))
+				for i := width - 2 - offset; i > width-cell.width-1-offset; i-- {
+					termbox.SetChar(i, height-1, rune('h'))
 				}
 			}
 			for i := width - 1 - offset; i > length-1-offset; i-- {
@@ -141,7 +140,6 @@ func (s *State) calcItem(item string) string {
 
 func (s *State) calc_offset(cells []cell) int {
 	offset := 0
-	s.Logger.Log(fmt.Sprintf("len: %d", len(cells)))
 	for _, v := range cells {
 		offset += len(s.calcItem(v.value))
 	}
