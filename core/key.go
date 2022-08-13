@@ -160,7 +160,10 @@ func (s *State) NewLine() {
 	}
 }
 
-func (s *State) CtrlW() {	
+// calulate indecies of spaces in string ex. [4, 7, 9]
+// move s.CX forward/backwards on those values on key event
+
+func (s *State) WordSkipBackwards() {
 	// if only 1 line	 && Y cursor is out of bounds
 	if len(s.Lines) == 0 && s.CY > len(s.Lines) {
 		return
@@ -177,15 +180,35 @@ func (s *State) CtrlW() {
 	// if there is no space following the X cursor
 	// move X cursor to end of line
 	if space == -1 {
-		s.CX = len(s.Lines[s.CY])-1	
+		s.CX = 0
 		return
 	}
 	// cursor is moved to the index after the space
-	s.CX += space+2
+	s.CX -= space - 2
 }
 
-func (s *State) CtrlS() {
+func (s *State) WordSkipForwards() {
+	// if only 1 line	 && Y cursor is out of bounds
+	if len(s.Lines) == 0 && s.CY > len(s.Lines) {
+		return
+	}
 
+	// if X cursor is out of bounds
+	if s.CX > len(s.Lines[s.CY]) {
+		return
+	}
+
+	// looks for next index of a space from X cursor
+	space := strings.Index(string(s.Lines[s.CY][s.CX+1:]), " ")
+
+	// if there is no space following the X cursor
+	// move X cursor to end of line
+	if space == -1 {
+		s.CX = len(s.Lines[s.CY]) - 1
+		return
+	}
+	// cursor is moved to the index after the space
+	s.CX += space + 2
 }
 
 // specific line operations
@@ -214,4 +237,20 @@ func delete_line(lines *[][]rune, i int) {
 	copy((*lines)[i:], (*lines)[i+1:])
 	(*lines)[len((*lines))-1] = []rune{}
 	*lines = (*lines)[:len(*lines)-1]
+}
+
+func all_indices(str, substr string) (indices []int) {
+	if len(substr) == 0 {
+		return
+	}
+	offset := 0
+	for {
+		i := strings.Index(str[offset:], substr)
+		if i == -1 {
+			return
+		}
+		offset += i
+		indices = append(indices, offset)
+		offset += len(substr)
+	}
 }
