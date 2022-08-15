@@ -110,7 +110,7 @@ func (s *State) drawCell(width int, height int, cells *[]cell) {
 			offset := s.calc_offset((*cells)[i+1:])
 			if len(text) < cell.width {
 				for i := width - 2 - offset; i > width-cell.width-1-offset; i-- {
-					termbox.SetChar(i, height-1, rune('h'))
+					termbox.SetChar(i, height-1, rune(0))
 				}
 			}
 			for i := width - 1 - offset; i > length-1-offset; i-- {
