@@ -27,13 +27,17 @@ func Read(file string, s *core.State) error {
 	for snr.Scan() {
 		txt := snr.Text()
 
-		lines[y] = []rune(txt)
+		lines = append(lines, []rune(txt))
+		// lines[y] = []rune(txt)
 
 		for i := 0; i < len(lines[y]); i++ {
-			termbox.SetChar(i, y, lines[y][i])
+			termbox.SetChar(i, y-1, lines[y][i])
 		}
 
 		y++
+	}
+	for i := 0; i < len(lines[y]); i++ {
+		termbox.SetChar(i, y-1, lines[y][i])
 	}
 
 	if len(lines) == 0 {
