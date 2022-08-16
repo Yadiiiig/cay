@@ -31,13 +31,13 @@ func Read(file string, s *core.State) error {
 		// lines[y] = []rune(txt)
 
 		for i := 0; i < len(lines[y]); i++ {
-			termbox.SetChar(i, y, lines[y][i])
+			termbox.SetChar(i, y-1, lines[y][i])
 		}
 
 		y++
 	}
 	for i := 0; i < len(lines[y]); i++ {
-		termbox.SetChar(i, y, lines[y][i])
+		termbox.SetChar(i, y-1, lines[y][i])
 	}
 
 	if len(lines) == 0 {
